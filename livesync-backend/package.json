@@ -1,0 +1,24 @@
+{
+  "name": "livesync-backend",
+  "version": "1.0.0",
+  "description": "LiveSync REST API: Express + JWT + DynamoDB, publishes order events to AWS AppSync",
+  "type": "module",
+  "main": "src/server.js",
+  "engines": { "node": ">=18" },
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "node --watch src/server.js",
+    "create-tables": "node scripts/createTables.js",
+    "seed-catalog": "node scripts/seedCatalog.js",
+    "test": "node --test"
+  },
+  "dependencies": {
+    "@aws-sdk/client-dynamodb": "^3.600.0",
+    "@aws-sdk/lib-dynamodb": "^3.600.0",
+    "bcryptjs": "^2.4.3",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "jsonwebtoken": "^9.0.2"
+  }
+}

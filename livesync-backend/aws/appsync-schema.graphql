@@ -1,0 +1,42 @@
+# Paste this into AWS AppSync -> your API -> Schema -> Save Schema.
+# The backend calls publishOrderEvent after every order change;
+# AppSync then pushes the event to every browser subscribed to onOrderEvent.
+
+schema {
+  query: Query
+  mutation: Mutation
+  subscription: Subscription
+}
+
+type OrderEvent {
+  eventType: String!        # ORDER_CREATED | ORDER_STATUS_CHANGED | DELIVERY_ASSIGNED
+  orderId: ID!
+  customerId: ID!
+  deliveryPartnerId: ID
+  orderStatus: String!
+  previousStatus: String
+  orderJson: AWSJSON!       # the full order as a JSON string
+  timestamp: AWSDateTime!
+}
+
+type Query {
+  ping: String              # AppSync requires a Query type; this is never used
+}
+
+type Mutation {
+  publishOrderEvent(
+    eventType: String!
+    orderId: ID!
+    customerId: ID!
+    deliveryPartnerId: ID
+    orderStatus: String!
+    previousStatus: String
+    orderJson: AWSJSON!
+    timestamp: AWSDateTime!
+  ): OrderEvent
+}
+
+type Subscription {
+  onOrderEvent(orderId: ID, customerId: ID, deliveryPartnerId: ID): OrderEvent
+    @aws_subscribe(mutations: ["publishOrderEvent"])
+}
